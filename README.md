@@ -35,3 +35,6 @@
 ```bash
 git clone https://github.com/hrs121/KachaBazar.git
 cd KachaBazar
+cd kachabazar-frontend
+npm install
+npm run dev
