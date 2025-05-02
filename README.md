@@ -34,4 +34,4 @@
 
 ```bash
 git clone https://github.com/hrs121/KachaBazar.git
-cd KachaBazar-platform
+cd KachaBazar
