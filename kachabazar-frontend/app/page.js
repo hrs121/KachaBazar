@@ -1,11 +1,18 @@
 // pages/index.js
+import CategoriesSection from '@/Components/Categories';
 import Header from '../Components/Header';
+import Hero from '../Components/Hero';
+import FeaturedProducts from '@/Components/FeaturedProducts';
+import BannerSection from '@/Components/Banner';
 
 const HomePage = () => {
   return (
     <div>
       <Header />
-      <h1 className="text-center text-4xl my-8">Welcome to Our Shop</h1>
+      <Hero />
+      <CategoriesSection />
+      <FeaturedProducts />
+      <BannerSection  />
     </div>
   );
 };
