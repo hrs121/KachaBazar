@@ -4,8 +4,10 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import { MdAccountCircle, MdEmail, MdLock } from "react-icons/md";
 import Link from "next/link";
+import { useUser } from "@/context/UserContext"; // Adjust the path if needed
 
 export default function RegisterForm() {
+  const { setUser } = useUser(); // Add this line
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -63,9 +65,10 @@ export default function RegisterForm() {
       return;
     }
 
-      // const data = await response.json();
-      // console.log("Login success:", data);
-      router.push('/');
+       const data = await response.json();
+     console.log("Login success:", data);
+      setUser(data.user); // Set the user in context
+      router.push('/home');
     } catch (error) {
       console.error("Error during login:", error);
       setErrorMessage("An unexpected error occurred. Please try again.");
