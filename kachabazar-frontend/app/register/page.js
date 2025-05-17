@@ -1,24 +1,76 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from 'next/navigation';
 import { MdAccountCircle, MdEmail, MdLock } from "react-icons/md";
+import Link from "next/link";
 
 export default function RegisterForm() {
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
     email: "",
-    password: ""
+    phoneNumber: "",
+    newPassword: "",
+    confirmPassword: "",
   });
+  const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", form);
-    // Add actual submission logic here
+    if (form.newPassword !== form.confirmPassword) {
+      setErrorMessage("Passwords do not match.");
+      setForm({
+        newPassword: "",
+        confirmPassword: "",
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/api/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) {
+      const errorData = await response.json();
+      setErrorMessage(errorData.message || "Registration failed");
+      // Reset form fields
+      setForm({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+      return;
+    }
+
+      // const data = await response.json();
+      // console.log("Login success:", data);
+      router.push('/');
+    } catch (error) {
+      console.error("Error during login:", error);
+      setErrorMessage("An unexpected error occurred. Please try again.");
+      setForm({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+    }
   };
 
   return (
@@ -85,9 +137,9 @@ export default function RegisterForm() {
                     <div className="relative">
                     <MdEmail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg" />
                     <input
-                        type="number"
-                        name="phone_number"
-                        value={form.phone_number}
+                        type="text"
+                        name="phoneNumber"
+                        value={form.phoneNumber}
                         onChange={handleChange}
                         placeholder="01xxxxxxxxx"
                         className="w-full pl-10 pr-3 py-2 rounded-md border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -101,8 +153,8 @@ export default function RegisterForm() {
                     <MdLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg" />
                     <input
                         type="password"
-                        name="password"
-                        value={form.password}
+                        name="newPassword"
+                        value={form.newPassword}
                         onChange={handleChange}
                         placeholder="************"
                         className="w-full pl-10 pr-3 py-2 rounded-md border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -115,8 +167,8 @@ export default function RegisterForm() {
                     <MdLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg" />
                     <input
                         type="password"
-                        name="password"
-                        value={form.password}
+                        name="confirmPassword"
+                        value={form.confirmPassword}
                         onChange={handleChange}
                         placeholder="************"
                         className="w-full pl-10 pr-3 py-2 rounded-md border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -124,6 +176,7 @@ export default function RegisterForm() {
                     </div>
                 </div>
 
+              {errorMessage && <p className="text-red-500">{errorMessage}</p>}
               <div className="px-3 mt-5">
                 <button
                   type="submit"
@@ -131,6 +184,12 @@ export default function RegisterForm() {
                 >
                   REGISTER NOW
                 </button>
+              </div>
+              <div className="mt-6 text-center text-sm text-gray-600">
+                  Have an account?{" "}
+                  <Link href="/login" className="text-indigo-600 hover:text-indigo-500 font-medium">
+                      Sign In
+                  </Link>
               </div>
             </form>
           </div>
