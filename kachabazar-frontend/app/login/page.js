@@ -24,7 +24,6 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Example: Replace with real API logic
     try {
       const response = await fetch("http://localhost:5000/api/users/login", {
         method: "POST",
