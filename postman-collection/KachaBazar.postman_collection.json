@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"username\": \"john123\",\r\n  \"password\": \"mypassword\",\r\n  \"mobile\": \"0123456789\"\r\n}\r\n",
+					"raw": "{\r\n  \"firstName\": \"John\",\r\n  \"lastName\": \"Wick\",\r\n  \"email\": \"abc@gmail.com\",\r\n  \"password\": \"mypassword\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -43,7 +43,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"username\": \"john123\",\r\n  \"password\": \"mypassword\"\r\n}",
+					"raw": "{\r\n  \"email\": \"abc@gmail.com\",\r\n  \"password\": \"mypassword\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
