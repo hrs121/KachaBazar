@@ -23,11 +23,11 @@ const Header = () => {
                 <a href="#"><i className="fa fa-linkedin"></i></a>
                 <a href="#"><i className="fa fa-pinterest-p"></i></a>
               </div>
-              <div className="flex items-center space-x-1">
+              {/* <div className="flex items-center space-x-1">
                 <Image src="/img/language.png" alt="Lang" width={20} height={15} />
                 <span>English</span>
-              </div>
-              <Link href="#" className="flex items-center space-x-1">
+              </div> */}
+              <Link href="/login" className="flex items-center space-x-1">
                 <i className="fa fa-user"></i>
                 <span>Login</span>
               </Link>
@@ -38,7 +38,7 @@ const Header = () => {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="w-1/4">
             <Link href="/">
-              <Image src="/img/logo.png" alt="Logo" width={120} height={50} />
+              <Image src="/img/kachabazar_icon.png" alt="Logo" width={80} height={50} />
             </Link>
           </div>
           <nav className="w-2/4 hidden md:flex justify-center space-x-6 font-medium">

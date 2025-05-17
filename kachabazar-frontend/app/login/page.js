@@ -1,15 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from 'next/navigation';
 import Link from "next/link";
-
 
 const LoginPage = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
-    remember: false,
+    // remember: false,
   });
+  const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -24,7 +26,7 @@ const LoginPage = () => {
 
     // Example: Replace with real API logic
     try {
-      const response = await fetch("/api/login", {
+      const response = await fetch("http://localhost:5000/api/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -32,13 +34,20 @@ const LoginPage = () => {
         body: JSON.stringify(form),
       });
 
-      if (!response.ok) throw new Error("Login failed");
+      if (!response.ok) {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || "Login failed");
+        setForm({ email: "", password: "" });
+        return;
+      }
 
-      const data = await response.json();
-      console.log("Login success:", data);
-      // Redirect or show message
+      // const data = await response.json();
+      // console.log("Login success:", data);
+      router.push('/');
     } catch (error) {
       console.error("Error during login:", error);
+      setErrorMessage("An unexpected error occurred. Please try again.");
+      setForm({ email: "", password: "" });
     }
   };
 
@@ -80,7 +89,7 @@ const LoginPage = () => {
             />
           </div>
 
-          <div className="flex items-center justify-between">
+          {/* <div className="flex items-center justify-between">
             <label className="flex items-center">
               <input
                 type="checkbox"
@@ -94,8 +103,8 @@ const LoginPage = () => {
             <a href="#" className="text-sm text-indigo-600 hover:text-indigo-500">
               Forgot password?
             </a>
-          </div>
-
+          </div> */}
+          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
           <button
             type="submit"
             className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors"
