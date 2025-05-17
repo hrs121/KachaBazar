@@ -13,6 +13,7 @@ export default function RegisterForm() {
     phoneNumber: "",
     newPassword: "",
     confirmPassword: "",
+    category: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
@@ -26,8 +27,13 @@ export default function RegisterForm() {
     if (form.newPassword !== form.confirmPassword) {
       setErrorMessage("Passwords do not match.");
       setForm({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
         newPassword: "",
         confirmPassword: "",
+        category: "",
       });
       return;
     }
@@ -52,6 +58,7 @@ export default function RegisterForm() {
         phoneNumber: "",
         newPassword: "",
         confirmPassword: "",
+        category: "",
       });
       return;
     }
@@ -69,6 +76,7 @@ export default function RegisterForm() {
         phoneNumber: "",
         newPassword: "",
         confirmPassword: "",
+        category: "",
       });
     }
   };
@@ -145,6 +153,22 @@ export default function RegisterForm() {
                         className="w-full pl-10 pr-3 py-2 rounded-md border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                     </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm mb-1">Category</label>
+                  <div className="relative">
+                    <select
+                      name="category"
+                      value={form.category}
+                      onChange={handleChange}
+                      className="w-full pl-3 pr-3 py-2 rounded-md border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                      <option value="" disabled>Select category</option>
+                      <option value="buyer">Buyer</option>
+                      <option value="seller">Seller</option>
+                    </select>
+                  </div>
                 </div>
 
                 <div>
