@@ -3,9 +3,17 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useUser } from "@/context/UserContext";
+import { useRouter } from 'next/navigation';
 
 const Header = () => {
   const { user } = useUser();
+  const { setUser } = useUser();
+  const router = useRouter();
+
+  const handleLogout = (e) => {
+    setUser('');
+    router.push('/home');
+  };
 
   return (
     <header className="bg-white shadow sticky top-0 z-50">
@@ -26,9 +34,9 @@ const Header = () => {
                 <span className="hidden sm:inline text-gray-700 font-medium">
                   Hi, {user.firstName}
                 </span>
-                <Link href="/logout" className="text-indigo-600 hover:underline">
+                <a className="text-indigo-600 hover:underline" onClick={handleLogout}>
                   Logout
-                </Link>
+                </a>
               </div>
             ) : (
               <Link href="/login" className="text-indigo-600 hover:underline">
@@ -50,7 +58,11 @@ const Header = () => {
         {/* Nav Links */}
         <nav className="hidden md:flex space-x-6 font-medium text-gray-700">
           <Link href="/home" className="hover:text-green-600">Home</Link>
-          <Link href="/myshop" className="hover:text-green-600">Shop</Link>
+          {user?.category === 'seller' && (
+            <Link href="/myshop" className="hover:text-green-600">
+              Shop
+            </Link>
+          )}
 
           <div className="relative group">
             <button className="hover:text-green-600">Pages</button>
