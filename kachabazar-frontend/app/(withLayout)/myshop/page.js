@@ -62,7 +62,7 @@ const SellerDashboard = () => {
         {/* Product Overview */}
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-800">Your Products</h3>
-          <Link href="/seller/add-product" className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+          <Link href="/addproduct" className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
             + Add Product
           </Link>
         </div>

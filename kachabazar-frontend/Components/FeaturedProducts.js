@@ -44,21 +44,21 @@ const FeaturedProducts = () => {
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {filtered.map(item => (
-            <div
-  key={item.id}
-  className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
->
-                <div
-  className="h-52 bg-cover bg-center relative group rounded-t-2xl"
-  style={{ backgroundImage: `url(${item.image})` }}
->
-  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors duration-300 rounded-t-2xl" />
-  <ul className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-    <li><a href="#" className="text-white text-lg hover:text-red-500"><FaHeart /></a></li>
-    <li><a href="#" className="text-white text-lg hover:text-yellow-400"><FaRetweet /></a></li>
-    <li><a href="#" className="text-white text-lg hover:text-green-400"><FaShoppingCart /></a></li>
-  </ul>
-</div>
+              <div
+                key={item.id}
+                className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
+              >
+                              <div
+                className="h-52 bg-cover bg-center relative group rounded-t-2xl"
+                style={{ backgroundImage: `url(${item.image})` }}
+              >
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors duration-300 rounded-t-2xl" />
+                <ul className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <li><a href="#" className="text-white text-lg hover:text-red-500"><FaHeart /></a></li>
+                  <li><a href="#" className="text-white text-lg hover:text-yellow-400"><FaRetweet /></a></li>
+                  <li><a href="#" className="text-white text-lg hover:text-green-400"><FaShoppingCart /></a></li>
+                </ul>
+              </div>
               <div className="p-4 text-center">
                 <h6 className="font-medium text-gray-800 hover:text-green-600">
                   <a href="#">{item.title}</a>
