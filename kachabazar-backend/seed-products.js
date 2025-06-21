@@ -3,40 +3,77 @@ const Product = require('./models/Product-simple');
 require('dotenv').config();
 
 const sampleProducts = [
-  {
-    title: "Fresh Apple",
-    price: 2.99,
-    image: "/img/featured/feature-1.jpg",
-    tags: ["fruit", "fresh", "organic"],
-    email: "seller@example.com"
+  { 
+    _id: '507f1f77bcf86cd799439011', 
+    name: 'Crab Pool Security', 
+    price: 30, 
+    category: 'fresh-meat',
+    description: 'Fresh seafood product',
+    inStock: true,
+    email: 'seller@example.com'
   },
-  {
-    title: "Organic Banana",
-    price: 1.99,
-    image: "/img/featured/feature-2.jpg",
-    tags: ["fruit", "organic", "tropical"],
-    email: "seller@example.com"
+  { 
+    _id: '507f1f77bcf86cd799439012', 
+    name: 'Fresh Vegetables', 
+    price: 25, 
+    category: 'vegetables',
+    description: 'Organic fresh vegetables',
+    inStock: true,
+    email: 'seller@example.com'
   },
-  {
-    title: "Fresh Tomatoes",
-    price: 3.49,
-    image: "/img/featured/feature-3.jpg",
-    tags: ["vegetable", "fresh", "red"],
-    email: "seller@example.com"
+  { 
+    _id: '507f1f77bcf86cd799439013', 
+    name: 'Organic Meat', 
+    price: 35, 
+    category: 'fresh-meat',
+    description: 'Premium organic meat',
+    inStock: true,
+    email: 'seller@example.com'
   },
-  {
-    title: "Green Lettuce",
-    price: 2.29,
-    image: "/img/featured/feature-4.jpg",
-    tags: ["vegetable", "green", "leafy"],
-    email: "seller@example.com"
+  { 
+    _id: '507f1f77bcf86cd799439014', 
+    name: 'Fast Food Item', 
+    price: 20, 
+    category: 'fastfood',
+    description: 'Quick and tasty fast food',
+    inStock: true,
+    email: 'seller@example.com'
   },
-  {
-    title: "Organic Carrots",
-    price: 2.79,
-    image: "/img/featured/feature-5.jpg",
-    tags: ["vegetable", "organic", "orange"],
-    email: "seller@example.com"
+  { 
+    _id: '507f1f77bcf86cd799439015', 
+    name: 'Fresh Fruit', 
+    price: 15, 
+    category: 'fruits',
+    description: 'Seasonal fresh fruits',
+    inStock: true,
+    email: 'seller@example.com'
+  },
+  { 
+    _id: '507f1f77bcf86cd799439016', 
+    name: 'Organic Orange', 
+    price: 18, 
+    category: 'oranges',
+    description: 'Sweet organic oranges',
+    inStock: true,
+    email: 'seller@example.com'
+  },
+  { 
+    _id: '507f1f77bcf86cd799439017', 
+    name: 'Premium Meat', 
+    price: 45, 
+    category: 'fresh-meat',
+    description: 'High quality premium meat',
+    inStock: true,
+    email: 'seller@example.com'
+  },
+  { 
+    _id: '507f1f77bcf86cd799439018', 
+    name: 'Healthy Snack', 
+    price: 12, 
+    category: 'fastfood',
+    description: 'Nutritious healthy snack',
+    inStock: true,
+    email: 'seller@example.com'
   }
 ];
 

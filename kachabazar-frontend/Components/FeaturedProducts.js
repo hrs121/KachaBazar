@@ -8,14 +8,14 @@ import Link from 'next/link';
 const categories = ['All', 'Oranges', 'Fresh Meat', 'Vegetables', 'Fastfood'];
 
 const products = [
-  { id: 1, title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-1.jpg', tags: ['oranges', 'fresh-meat'] },
-  { id: 2, title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-2.jpg', tags: ['vegetables', 'fastfood'] },
-  { id: 3, title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-3.jpg', tags: ['vegetables', 'fresh-meat'] },
-  { id: 4, title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-4.jpg', tags: ['fastfood', 'oranges'] },
-  { id: 5, title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-5.jpg', tags: ['fresh-meat', 'vegetables'] },
-  { id: 6, title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-6.jpg', tags: ['oranges', 'fastfood'] },
-  { id: 7, title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-7.jpg', tags: ['fresh-meat', 'vegetables'] },
-  { id: 8, title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-8.jpg', tags: ['fastfood', 'vegetables'] },
+  { id: '507f1f77bcf86cd799439011', title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-1.jpg', tags: ['oranges', 'fresh-meat'] },
+  { id: '507f1f77bcf86cd799439012', title: 'Fresh Vegetables', price: 25, image: '/img/featured/feature-2.jpg', tags: ['vegetables', 'fastfood'] },
+  { id: '507f1f77bcf86cd799439013', title: 'Organic Meat', price: 35, image: '/img/featured/feature-3.jpg', tags: ['vegetables', 'fresh-meat'] },
+  { id: '507f1f77bcf86cd799439014', title: 'Fast Food Item', price: 20, image: '/img/featured/feature-4.jpg', tags: ['fastfood', 'oranges'] },
+  { id: '507f1f77bcf86cd799439015', title: 'Fresh Fruit', price: 15, image: '/img/featured/feature-5.jpg', tags: ['fresh-meat', 'vegetables'] },
+  { id: '507f1f77bcf86cd799439016', title: 'Organic Orange', price: 18, image: '/img/featured/feature-6.jpg', tags: ['oranges', 'fastfood'] },
+  { id: '507f1f77bcf86cd799439017', title: 'Premium Meat', price: 45, image: '/img/featured/feature-7.jpg', tags: ['fresh-meat', 'vegetables'] },
+  { id: '507f1f77bcf86cd799439018', title: 'Healthy Snack', price: 12, image: '/img/featured/feature-8.jpg', tags: ['fastfood', 'vegetables'] },
 ];
 
 const FeaturedProducts = () => {

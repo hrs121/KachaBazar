@@ -1,8 +1,14 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const Cart = require('../models/Cart-functional');
 const Product = require('../models/Product-simple');
 const auth = require('../middleware/auth');
+
+// Helper function to validate ObjectId
+const isValidObjectId = (id) => {
+  return mongoose.Types.ObjectId.isValid(id);
+};
 
 // Get user's cart
 router.get('/', auth, async (req, res) => {
@@ -25,6 +31,11 @@ router.get('/', auth, async (req, res) => {
 router.post('/add', auth, async (req, res) => {
   try {
     const { productId, quantity = 1 } = req.body;
+    
+    // Validate productId
+    if (!isValidObjectId(productId)) {
+      return res.status(400).json({ error: 'Invalid product ID format' });
+    }
     
     // Check if product exists
     const product = await Product.findById(productId);
@@ -74,6 +85,11 @@ router.put('/update/:productId', auth, async (req, res) => {
     const { productId } = req.params;
     const { quantity } = req.body;
     
+    // Validate productId
+    if (!isValidObjectId(productId)) {
+      return res.status(400).json({ error: 'Invalid product ID format' });
+    }
+    
     if (quantity < 1) {
       return res.status(400).json({ error: 'Quantity must be at least 1' });
     }
@@ -109,6 +125,11 @@ router.put('/update/:productId', auth, async (req, res) => {
 router.delete('/remove/:productId', auth, async (req, res) => {
   try {
     const { productId } = req.params;
+    
+    // Validate productId
+    if (!isValidObjectId(productId)) {
+      return res.status(400).json({ error: 'Invalid product ID format' });
+    }
     
     const cart = await Cart.findOne({ user: req.user._id });
     if (!cart) {

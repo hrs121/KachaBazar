@@ -1,8 +1,14 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const Wishlist = require('../models/Wishlist-functional');
 const Product = require('../models/Product-simple');
 const auth = require('../middleware/auth');
+
+// Helper function to validate ObjectId
+const isValidObjectId = (id) => {
+  return mongoose.Types.ObjectId.isValid(id);
+};
 
 // Get user's wishlist
 router.get('/', auth, async (req, res) => {
@@ -25,6 +31,11 @@ router.get('/', auth, async (req, res) => {
 router.post('/add', auth, async (req, res) => {
   try {
     const { productId } = req.body;
+    
+    // Validate productId
+    if (!isValidObjectId(productId)) {
+      return res.status(400).json({ error: 'Invalid product ID format' });
+    }
     
     // Check if product exists
     const product = await Product.findById(productId);
