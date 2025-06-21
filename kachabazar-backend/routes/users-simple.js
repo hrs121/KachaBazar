@@ -15,9 +15,7 @@ router.post('/register', async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(confirmPassword, 10);
     const newUser = new User({ firstName, lastName, email, phoneNumber, password: hashedPassword, category });
-    await newUser.save();
-
-    const user = await User.findOne({ email });
+    await newUser.save();    const user = await User.findOne({ email });
     
     // Generate JWT token
     const token = jwt.sign(
@@ -26,7 +24,7 @@ router.post('/register', async (req, res) => {
         email: user.email,
         category: user.category 
       },
-      process.env.JWT_SECRET || 'your-secret-key',
+      process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
 
@@ -55,8 +53,7 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: 'Invalid credentials' });
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+    const isMatch = await bcrypt.compare(password, user.password);    if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
     // Generate JWT token
     const token = jwt.sign(
@@ -65,7 +62,7 @@ router.post('/login', async (req, res) => {
         email: user.email,
         category: user.category 
       },
-      process.env.JWT_SECRET || 'your-secret-key',
+      process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
 

@@ -13,11 +13,18 @@ const api = axios.create({
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+    try {
+      if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('token');
+        if (token && token !== 'undefined' && token !== 'null') {
+          config.headers.Authorization = `Bearer ${token}`;
+          console.log('Token added to request:', token.substring(0, 20) + '...');
+        } else {
+          console.log('No valid token found for request');
+        }
       }
+    } catch (error) {
+      console.error('Error setting authorization header:', error);
     }
     return config;
   },
@@ -30,14 +37,19 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Only redirect to login for 401 errors on auth-critical routes
-    if (error.response?.status === 401 && 
-        !error.config?.url?.includes('/cart') && 
-        !error.config?.url?.includes('/wishlist')) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      if (typeof window !== 'undefined') {
-        window.location.href = '/login';
+    console.log('API Error:', error.response?.status, error.config?.url, error.response?.data?.message);
+    
+    // Only redirect to login for 401 errors on critical auth routes (not cart/wishlist)
+    if (error.response?.status === 401) {
+      const url = error.config?.url || '';
+      const isCriticalRoute = url.includes('/login') || url.includes('/register') || url.includes('/profile');
+      
+      if (isCriticalRoute) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        if (typeof window !== 'undefined') {
+          window.location.href = '/login';
+        }
       }
     }
     return Promise.reject(error);

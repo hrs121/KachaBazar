@@ -6,20 +6,36 @@ const auth = async (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     
     if (!token) {
+      console.log('Auth error: No token provided');
       return res.status(401).json({ message: 'No token, authorization denied' });
+    }    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      console.error('JWT_SECRET not found in environment variables');
+      return res.status(500).json({ message: 'Server configuration error' });
     }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    const decoded = jwt.verify(token, jwtSecret);
+    console.log('Token decoded successfully:', { userId: decoded.userId, email: decoded.email });
+    
     const user = await User.findById(decoded.userId).select('-password');
     
     if (!user) {
-      return res.status(401).json({ message: 'Token is not valid' });
+      console.log('Auth error: User not found for ID:', decoded.userId);
+      return res.status(401).json({ message: 'User not found' });
     }
 
+    console.log('User authenticated:', user.email);
     req.user = user;
     next();
   } catch (error) {
-    res.status(401).json({ message: 'Token is not valid' });
+    console.log('Auth error:', error.message);
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Token expired' });
+    }
+    res.status(401).json({ message: 'Token verification failed' });
   }
 };
 

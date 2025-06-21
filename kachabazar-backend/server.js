@@ -7,6 +7,14 @@ dotenv.config();
 
 const app = express();
 
+// Check JWT_SECRET at startup
+if (!process.env.JWT_SECRET) {
+  console.error('⚠️  JWT_SECRET not found in environment variables');
+  process.exit(1);
+} else {
+  console.log('✅ JWT_SECRET loaded successfully');
+}
+
 // Middleware
 app.use(cors());
 app.use(express.json());
