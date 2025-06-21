@@ -1,6 +1,9 @@
 "use client";
 import React, { useState } from 'react';
 import { FaHeart, FaRetweet, FaShoppingCart } from 'react-icons/fa';
+import { useCartWishlist } from '@/context/CartWishlistContext';
+import { useUser } from '@/context/UserContext';
+import Link from 'next/link';
 
 const categories = ['All', 'Oranges', 'Fresh Meat', 'Vegetables', 'Fastfood'];
 
@@ -17,10 +20,20 @@ const products = [
 
 const FeaturedProducts = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const { addToCart, toggleWishlist, isInWishlist } = useCartWishlist();
+  const { user } = useUser();
 
   const filtered = selectedCategory === 'All'
     ? products
     : products.filter(p => p.tags.includes(selectedCategory.toLowerCase()));
+
+  const handleAddToCart = async (productId) => {
+    await addToCart(productId);
+  };
+
+  const handleToggleWishlist = async (productId) => {
+    await toggleWishlist(productId);
+  };
 
   return (
     <section className="py-16 bg-white">
@@ -39,9 +52,7 @@ const FeaturedProducts = () => {
               {cat}
             </li>
           ))}
-        </ul>
-
-        {/* Product Grid */}
+        </ul>        {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {filtered.map(item => (
               <div
@@ -54,14 +65,36 @@ const FeaturedProducts = () => {
               >
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors duration-300 rounded-t-2xl" />
                 <ul className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <li><a href="#" className="text-white text-lg hover:text-red-500"><FaHeart /></a></li>
-                  <li><a href="#" className="text-white text-lg hover:text-yellow-400"><FaRetweet /></a></li>
-                  <li><a href="#" className="text-white text-lg hover:text-green-400"><FaShoppingCart /></a></li>
+                  <li>
+                    <button 
+                      onClick={() => handleToggleWishlist(item.id)}
+                      className={`text-white text-lg hover:text-red-500 p-2 rounded-full bg-black/20 hover:bg-black/40 transition-colors ${
+                        user && isInWishlist(item.id) ? 'text-red-500' : ''
+                      }`}
+                      disabled={!user}
+                    >
+                      <FaHeart />
+                    </button>
+                  </li>
+                  <li>
+                    <Link href={`/product-details/${item.id}`} className="text-white text-lg hover:text-yellow-400 p-2 rounded-full bg-black/20 hover:bg-black/40 transition-colors">
+                      <FaRetweet />
+                    </Link>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => handleAddToCart(item.id)}
+                      className="text-white text-lg hover:text-green-400 p-2 rounded-full bg-black/20 hover:bg-black/40 transition-colors"
+                      disabled={!user}
+                    >
+                      <FaShoppingCart />
+                    </button>
+                  </li>
                 </ul>
               </div>
               <div className="p-4 text-center">
                 <h6 className="font-medium text-gray-800 hover:text-green-600">
-                  <a href="#">{item.title}</a>
+                  <Link href={`/product-details/${item.id}`}>{item.title}</Link>
                 </h6>
                 <h5 className="text-green-600 font-bold">${item.price.toFixed(2)}</h5>
               </div>

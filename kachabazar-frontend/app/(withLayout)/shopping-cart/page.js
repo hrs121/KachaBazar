@@ -1,6 +1,67 @@
+"use client";
+
 import Header from '@/Components/Header';
+import { useCartWishlist } from '@/context/CartWishlistContext';
+import { useUser } from '@/context/UserContext';
+import { formatCurrency } from '@/lib/utils';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const Cart = () => {
+    const { cart, updateCartQuantity, removeFromCart, clearCart, loading } = useCartWishlist();
+    const { user } = useUser();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!user) {
+            router.push('/login');
+        }
+    }, [user, router]);
+
+    const handleQuantityChange = async (productId, currentQuantity, change) => {
+        const newQuantity = currentQuantity + change;
+        if (newQuantity < 1) {
+            await removeFromCart(productId);
+        } else {
+            await updateCartQuantity(productId, newQuantity);
+        }
+    };
+
+    const handleRemoveItem = async (productId) => {
+        await removeFromCart(productId);
+    };
+
+    const handleClearCart = async () => {
+        if (window.confirm('Are you sure you want to clear your cart?')) {
+            await clearCart();
+        }
+    };
+
+    if (!user) {
+        return null; // Will redirect to login
+    }
+
+    if (cart.items.length === 0) {
+        return (
+            <div>
+                <Header />
+                <div className="max-w-5xl mx-auto p-4 py-16 text-center">
+                    <div className="mb-8">
+                        <i className="fa fa-shopping-cart text-6xl text-gray-300 mb-4"></i>
+                        <h1 className="text-2xl font-semibold text-gray-700 mb-2">Your cart is empty</h1>
+                        <p className="text-gray-500 mb-6">Start shopping to add items to your cart</p>
+                        <button
+                            onClick={() => router.push('/home')}
+                            className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                        >
+                            Continue Shopping
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
     return (
         <div>
         <Header />

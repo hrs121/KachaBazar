@@ -25,6 +25,8 @@ mongoose.connect(process.env.MONGO_URI, {
 // Routes
 app.use('/api/users', require('./routes/users-simple'));
 app.use('/api/products', require('./routes/products-simple'));
+app.use('/api/cart', require('./routes/cart'));
+app.use('/api/wishlist', require('./routes/wishlist'));
 
 // Health check route
 app.get('/health', (req, res) => {

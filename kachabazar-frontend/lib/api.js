@@ -68,6 +68,15 @@ export const cartAPI = {
   clearCart: () => api.delete('/cart/clear'),
 };
 
+// Wishlist API functions
+export const wishlistAPI = {
+  getWishlist: () => api.get('/wishlist'),
+  addToWishlist: (productId) => api.post('/wishlist/add', { productId }),
+  removeFromWishlist: (productId) => api.delete(`/wishlist/remove/${productId}`),
+  toggleWishlist: (productId) => api.post('/wishlist/toggle', { productId }),
+  clearWishlist: () => api.delete('/wishlist/clear'),
+};
+
 // Orders API functions
 export const ordersAPI = {
   createOrder: (data) => api.post('/orders/create', data),

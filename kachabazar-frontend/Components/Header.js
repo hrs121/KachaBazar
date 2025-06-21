@@ -3,11 +3,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useUser } from "@/context/UserContext";
+import { useCartWishlist } from "@/context/CartWishlistContext";
 import { useRouter } from 'next/navigation';
 import { formatCurrency } from "@/lib/utils";
 
 const Header = () => {
-  const { user, logout, cart, cartItemCount, cartTotal } = useUser();
+  const { user, logout } = useUser();
+  const { cart, getCartItemCount, getWishlistItemCount } = useCartWishlist();
   const router = useRouter();
 
   const handleLogout = () => {
@@ -112,23 +114,24 @@ const Header = () => {
         {/* Cart & User Actions */}
         <div className="flex items-center gap-4">
           {user && (
-            <>
-              <Link href="/wishlist" className="relative text-gray-700 hover:text-red-500">
+            <>              <Link href="/wishlist" className="relative text-gray-700 hover:text-red-500">
                 <i className="fa fa-heart text-lg" />
-                <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {getWishlistItemCount()}
+                </span>
               </Link>
 
-              <Link href="/cart" className="relative text-gray-700 hover:text-green-600">
+              <Link href="/shopping-cart" className="relative text-gray-700 hover:text-green-600">
                 <i className="fa fa-shopping-bag text-lg" />
-                {cartItemCount > 0 && (
+                {getCartItemCount() > 0 && (
                   <span className="absolute -top-1 -right-2 bg-green-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {cartItemCount}
+                    {getCartItemCount()}
                   </span>
                 )}
               </Link>
 
               <div className="text-sm text-gray-700 hidden sm:block">
-                Items: <span className="text-green-600 font-semibold">{formatCurrency(cartTotal)}</span>
+                Items: <span className="text-green-600 font-semibold">{formatCurrency(cart.totalAmount || 0)}</span>
               </div>
             </>
           )}
