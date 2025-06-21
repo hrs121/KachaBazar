@@ -12,26 +12,29 @@ export const CartWishlistProvider = ({ children }) => {
   const [cart, setCart] = useState({ items: [], totalAmount: 0 });
   const [wishlist, setWishlist] = useState({ products: [] });
   const [loading, setLoading] = useState(false);
-
-  // Fetch cart when user logs in
+  // Fetch cart when user logs in (with delay to avoid interfering with login)
   useEffect(() => {
     if (user && token) {
-      fetchCart();
-      fetchWishlist();
+      // Add a small delay to ensure login is complete
+      const timer = setTimeout(() => {
+        fetchCart();
+        fetchWishlist();
+      }, 500);
+      return () => clearTimeout(timer);
     } else {
       setCart({ items: [], totalAmount: 0 });
       setWishlist({ products: [] });
     }
   }, [user, token]);
-
   // Fetch cart data
   const fetchCart = async () => {
     try {
       const response = await cartAPI.getCart();
       setCart(response.data);
     } catch (error) {
-      console.error('Error fetching cart:', error);
+      console.warn('Cart fetch failed (non-critical):', error.message);
       setCart({ items: [], totalAmount: 0 });
+      // Don't show toast for cart fetch errors as they're non-critical
     }
   };
 
@@ -41,8 +44,9 @@ export const CartWishlistProvider = ({ children }) => {
       const response = await wishlistAPI.getWishlist();
       setWishlist(response.data);
     } catch (error) {
-      console.error('Error fetching wishlist:', error);
+      console.warn('Wishlist fetch failed (non-critical):', error.message);
       setWishlist({ products: [] });
+      // Don't show toast for wishlist fetch errors as they're non-critical
     }
   };
 
