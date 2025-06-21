@@ -2,13 +2,16 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/users-simple');
 
 const auth = async (req, res, next) => {
-  try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
+  try {    let token = req.header('Authorization')?.replace('Bearer ', '');
     
     if (!token) {
       console.log('Auth error: No token provided');
       return res.status(401).json({ message: 'No token, authorization denied' });
-    }    const jwtSecret = process.env.JWT_SECRET;
+    }
+
+    // Remove any extra quotes that might be around the token
+    token = token.replace(/^"(.*)"$/, '$1');
+    console.log('Cleaned token:', token.substring(0, 20) + '...');const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
       console.error('JWT_SECRET not found in environment variables');
       return res.status(500).json({ message: 'Server configuration error' });

@@ -115,7 +115,14 @@ export const storage = {
     if (typeof window !== 'undefined') {
       try {
         const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
+        if (!item) return null;
+        
+        // For token, don't parse as JSON since it's already a string
+        if (key === 'token') {
+          return item.startsWith('"') && item.endsWith('"') ? JSON.parse(item) : item;
+        }
+        
+        return JSON.parse(item);
       } catch (error) {
         console.error('Error getting from localStorage:', error);
         return null;
@@ -127,7 +134,12 @@ export const storage = {
   set: (key, value) => {
     if (typeof window !== 'undefined') {
       try {
-        localStorage.setItem(key, JSON.stringify(value));
+        // For token, store as-is if it's a string, otherwise stringify
+        if (key === 'token' && typeof value === 'string') {
+          localStorage.setItem(key, value);
+        } else {
+          localStorage.setItem(key, JSON.stringify(value));
+        }
       } catch (error) {
         console.error('Error setting to localStorage:', error);
       }

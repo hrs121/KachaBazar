@@ -14,11 +14,12 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     try {
-      if (typeof window !== 'undefined') {
-        const token = localStorage.getItem('token');
+      if (typeof window !== 'undefined') {        const token = localStorage.getItem('token');
         if (token && token !== 'undefined' && token !== 'null') {
-          config.headers.Authorization = `Bearer ${token}`;
-          console.log('Token added to request:', token.substring(0, 20) + '...');
+          // Remove any extra quotes that might have been added by JSON.stringify
+          const cleanToken = token.replace(/^"(.*)"$/, '$1');
+          config.headers.Authorization = `Bearer ${cleanToken}`;
+          console.log('Token added to request:', cleanToken.substring(0, 20) + '...');
         } else {
           console.log('No valid token found for request');
         }
