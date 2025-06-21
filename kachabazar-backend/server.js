@@ -35,7 +35,7 @@ app.use('/api/users', require('./routes/users-simple'));
 app.use('/api/products', require('./routes/products-simple'));
 app.use('/api/cart', require('./routes/cart-functional'));
 app.use('/api/wishlist', require('./routes/wishlist-functional'));
-app.use('/api/orders', require('./routes/orders-simple'));
+app.use('/api/orders', require('./routes/orders-functional'));
 
 // Health check route
 app.get('/health', (req, res) => {
