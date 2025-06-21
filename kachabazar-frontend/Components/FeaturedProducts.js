@@ -5,17 +5,17 @@ import { useCartWishlist } from '@/context/CartWishlistContext';
 import { useUser } from '@/context/UserContext';
 import Link from 'next/link';
 
-const categories = ['All', 'Oranges', 'Fresh Meat', 'Vegetables', 'Fastfood'];
+const categories = ['All', 'Fruit', 'Vegetables', 'Fresh', 'Organic'];
 
 const products = [
-  { id: '507f1f77bcf86cd799439011', title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-1.jpg', tags: ['oranges', 'fresh-meat'] },
-  { id: '507f1f77bcf86cd799439012', title: 'Fresh Vegetables', price: 25, image: '/img/featured/feature-2.jpg', tags: ['vegetables', 'fastfood'] },
-  { id: '507f1f77bcf86cd799439013', title: 'Organic Meat', price: 35, image: '/img/featured/feature-3.jpg', tags: ['vegetables', 'fresh-meat'] },
-  { id: '507f1f77bcf86cd799439014', title: 'Fast Food Item', price: 20, image: '/img/featured/feature-4.jpg', tags: ['fastfood', 'oranges'] },
-  { id: '507f1f77bcf86cd799439015', title: 'Fresh Fruit', price: 15, image: '/img/featured/feature-5.jpg', tags: ['fresh-meat', 'vegetables'] },
-  { id: '507f1f77bcf86cd799439016', title: 'Organic Orange', price: 18, image: '/img/featured/feature-6.jpg', tags: ['oranges', 'fastfood'] },
-  { id: '507f1f77bcf86cd799439017', title: 'Premium Meat', price: 45, image: '/img/featured/feature-7.jpg', tags: ['fresh-meat', 'vegetables'] },
-  { id: '507f1f77bcf86cd799439018', title: 'Healthy Snack', price: 12, image: '/img/featured/feature-8.jpg', tags: ['fastfood', 'vegetables'] },
+  { id: '507f1f77bcf86cd799439011', title: 'Fresh Apple', price: 2.99, image: '/img/featured/feature-1.jpg', tags: ['fruit', 'fresh'] },
+  { id: '507f1f77bcf86cd799439012', title: 'Organic Banana', price: 1.99, image: '/img/featured/feature-2.jpg', tags: ['fruit', 'organic'] },
+  { id: '507f1f77bcf86cd799439013', title: 'Fresh Tomatoes', price: 3.49, image: '/img/featured/feature-3.jpg', tags: ['vegetables', 'fresh'] },
+  { id: '507f1f77bcf86cd799439014', title: 'Green Lettuce', price: 2.29, image: '/img/featured/feature-4.jpg', tags: ['vegetables', 'green'] },
+  { id: '507f1f77bcf86cd799439015', title: 'Organic Carrots', price: 2.79, image: '/img/featured/feature-5.jpg', tags: ['vegetables', 'organic'] },
+  { id: '507f1f77bcf86cd799439016', title: 'Fresh Broccoli', price: 3.99, image: '/img/featured/feature-6.jpg', tags: ['vegetables', 'fresh'] },
+  { id: '507f1f77bcf86cd799439017', title: 'Red Bell Pepper', price: 2.49, image: '/img/featured/feature-7.jpg', tags: ['vegetables', 'fresh'] },
+  { id: '507f1f77bcf86cd799439018', title: 'Fresh Strawberries', price: 4.99, image: '/img/featured/feature-8.jpg', tags: ['fruit', 'fresh'] },
 ];
 
 const FeaturedProducts = () => {
@@ -75,9 +75,8 @@ const FeaturedProducts = () => {
                     >
                       <FaHeart />
                     </button>
-                  </li>
-                  <li>
-                    <Link href={`/product-details/${item.id}`} className="text-white text-lg hover:text-yellow-400 p-2 rounded-full bg-black/20 hover:bg-black/40 transition-colors">
+                  </li>                  <li>
+                    <Link href={`/product-details?id=${item.id}`} className="text-white text-lg hover:text-yellow-400 p-2 rounded-full bg-black/20 hover:bg-black/40 transition-colors">
                       <FaRetweet />
                     </Link>
                   </li>
@@ -92,9 +91,8 @@ const FeaturedProducts = () => {
                   </li>
                 </ul>
               </div>
-              <div className="p-4 text-center">
-                <h6 className="font-medium text-gray-800 hover:text-green-600">
-                  <Link href={`/product-details/${item.id}`}>{item.title}</Link>
+              <div className="p-4 text-center">                <h6 className="font-medium text-gray-800 hover:text-green-600">
+                  <Link href={`/product-details?id=${item.id}`}>{item.title}</Link>
                 </h6>
                 <h5 className="text-green-600 font-bold">${item.price.toFixed(2)}</h5>
               </div>

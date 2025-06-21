@@ -1,123 +1,286 @@
-export default function ProductDetailsPage() {
-    return (
-      <div>
-        {/* Breadcrumb Section */}
-        <section className="bg-cover bg-center py-12" style={{ backgroundImage: 'url(/img/breadcrumb.jpg)' }}>
-          <div className="container mx-auto text-center">
-            <h2 className="text-4xl font-bold text-white mb-2">Vegetable’s Package</h2>
-            <div className="text-white space-x-2">
-              <a href="/" className="hover:underline">Home</a>
-              <span>/</span>
-              <a href="/" className="hover:underline">Vegetables</a>
-              <span>/</span>
-              <span>Vegetable’s Package</span>
-            </div>
-          </div>
-        </section>
-  
-        {/* Product Details Section */}
-        <section className="py-12">
-          <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+"use client";
+
+import Header from '@/Components/Header';
+import { useCartWishlist } from '@/context/CartWishlistContext';
+import { useUser } from '@/context/UserContext';
+import { formatCurrency } from '@/lib/utils';
+import { productsAPI } from '@/lib/api';
+import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+
+const ProductDetails = () => {
+    const { addToCart, addToWishlist, removeFromWishlist, wishlist, loading } = useCartWishlist();
+    const { user } = useUser();
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const productId = searchParams.get('id');
+    
+    const [product, setProduct] = useState(null);
+    const [productLoading, setProductLoading] = useState(true);
+    const [quantity, setQuantity] = useState(1);
+    const [selectedImage, setSelectedImage] = useState(0);
+
+    useEffect(() => {
+        if (productId) {
+            fetchProduct();
+        } else {
+            router.push('/home');
+        }
+    }, [productId]);
+
+    const fetchProduct = async () => {
+        try {
+            setProductLoading(true);
+            const response = await productsAPI.getProduct(productId);
+            setProduct(response.data);
+        } catch (error) {
+            console.error('Error fetching product:', error);
+            toast.error('Product not found');
+            router.push('/home');
+        } finally {
+            setProductLoading(false);
+        }
+    };
+
+    const handleAddToCart = async () => {
+        if (!user) {
+            toast.error('Please login to add items to cart');
+            router.push('/login');
+            return;
+        }
+
+        try {
+            await addToCart(product._id, quantity);
+            toast.success('Product added to cart!');
+        } catch (error) {
+            toast.error('Failed to add to cart');
+        }
+    };
+
+    const handleToggleWishlist = async () => {
+        if (!user) {
+            toast.error('Please login to use wishlist');
+            router.push('/login');
+            return;
+        }
+
+        try {
+            const isInWishlist = wishlist.products.some(p => p._id === product._id);
+            if (isInWishlist) {
+                await removeFromWishlist(product._id);
+                toast.success('Removed from wishlist');
+            } else {
+                await addToWishlist(product._id);
+                toast.success('Added to wishlist');
+            }
+        } catch (error) {
+            toast.error('Failed to update wishlist');
+        }
+    };
+
+    const handleQuantityChange = (change) => {
+        const newQuantity = quantity + change;
+        if (newQuantity >= 1) {
+            setQuantity(newQuantity);
+        }
+    };
+
+    if (productLoading) {
+        return (
             <div>
-              <img src="/img/product/details/product-details-1.jpg" alt="" className="w-full rounded-lg mb-4" />
-              <div className="flex gap-2 overflow-x-auto">
-                {[2, 3, 5, 4].map(i => (
-                  <img
-                    key={i}
-                    src={`/img/product/details/thumb-${i - 1}.jpg`}
-                    alt=""
-                    className="w-20 h-20 object-cover rounded-lg border"
-                  />
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 className="text-3xl font-semibold mb-2">Vegetable’s Package</h3>
-              <div className="flex items-center mb-2">
-                {[...Array(4)].map((_, i) => (
-                  <i key={i} className="fa fa-star text-yellow-400"></i>
-                ))}
-                <i className="fa fa-star-half-o text-yellow-400"></i>
-                <span className="ml-2 text-sm text-gray-600">(18 reviews)</span>
-              </div>
-              <div className="text-2xl text-green-600 font-bold mb-4">$50.00</div>
-              <p className="text-gray-700 mb-4">
-                Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vestibulum ac diam sit amet quam
-                vehicula elementum sed sit amet dui. Sed porttitor lectus nibh.
-              </p>
-              <div className="flex items-center space-x-4 mb-4">
-                <input
-                  type="number"
-                  defaultValue="1"
-                  className="w-16 border border-gray-300 rounded text-center py-1"
-                />
-                <button className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">ADD TO CART</button>
-                <button className="text-gray-500 hover:text-red-500">
-                  <span className="icon_heart_alt"></span>
-                </button>
-              </div>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li><strong>Availability:</strong> In Stock</li>
-                <li><strong>Shipping:</strong> 01 day shipping. <span className="text-green-600">Free pickup today</span></li>
-                <li><strong>Weight:</strong> 0.5 kg</li>
-                <li className="flex items-center space-x-2">
-                  <strong>Share on:</strong>
-                  <a href="#"><i className="fa fa-facebook"></i></a>
-                  <a href="#"><i className="fa fa-twitter"></i></a>
-                  <a href="#"><i className="fa fa-instagram"></i></a>
-                  <a href="#"><i className="fa fa-pinterest"></i></a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </section>
-  
-        {/* Tabs Section */}
-        <section className="container mx-auto py-12">
-          <div>
-            <div className="flex space-x-4  mb-4">
-              <button className="py-2 px-4 border-b-2 border-green-600 font-semibold">Description</button>
-              <button className="py-2 px-4 text-gray-600">Information</button>
-              <button className="py-2 px-4 text-gray-600">Reviews (1)</button>
-            </div>
-            <div>
-              <h6 className="text-lg font-semibold mb-2">Product Information</h6>
-              <p className="text-gray-700 mb-4">
-                Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Pellentesque in ipsum id orci porta dapibus.
-              </p>
-              <p className="text-gray-700">
-                Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              </p>
-            </div>
-          </div>
-        </section>
-  
-        {/* Related Products Section */}
-        <section className=" py-12">
-          <div className="container mx-auto">
-            <h2 className="text-2xl font-bold mb-6">Related Product</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {[1, 2, 3, 7].map(i => (
-                <div key={i} className="bg-white rounded-lg overflow-hidden shadow">
-                  <div
-                    className="h-48 bg-cover bg-center"
-                    style={{ backgroundImage: `url(/img/product/product-${i}.jpg)` }}
-                  >
-                    <ul className="flex justify-end p-2 space-x-2 text-white">
-                      <li><a href="#"><i className="fa fa-heart"></i></a></li>
-                      <li><a href="#"><i className="fa fa-retweet"></i></a></li>
-                      <li><a href="#"><i className="fa fa-shopping-cart"></i></a></li>
-                    </ul>
-                  </div>
-                  <div className="p-4">
-                    <h6 className="font-semibold mb-1"><a href="#">Crab Pool Security</a></h6>
-                    <h5 className="text-green-600 font-bold">$30.00</h5>
-                  </div>
+                <Header />
+                <div className="max-w-7xl mx-auto px-4 py-8">
+                    <div className="animate-pulse">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="bg-gray-300 h-96 rounded"></div>
+                            <div className="space-y-4">
+                                <div className="h-8 bg-gray-300 rounded w-3/4"></div>
+                                <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                                <div className="h-6 bg-gray-300 rounded w-1/4"></div>
+                                <div className="h-20 bg-gray-300 rounded"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              ))}
             </div>
-          </div>
-        </section>
-      </div>
+        );
+    }
+
+    if (!product) {
+        return (
+            <div>
+                <Header />
+                <div className="max-w-7xl mx-auto px-4 py-8 text-center">
+                    <h1 className="text-2xl font-semibold text-gray-900 mb-4">Product not found</h1>
+                    <button
+                        onClick={() => router.push('/home')}
+                        className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                    >
+                        Back to Products
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    const isInWishlist = wishlist.products.some(p => p._id === product._id);
+
+    return (
+        <div>
+            <Header />
+            <div className="max-w-7xl mx-auto px-4 py-8">
+                {/* Breadcrumb */}
+                <nav className="mb-8">
+                    <ol className="flex space-x-2 text-sm text-gray-500">
+                        <li>
+                            <button
+                                onClick={() => router.push('/home')}
+                                className="hover:text-green-600 transition-colors"
+                            >
+                                Home
+                            </button>
+                        </li>
+                        <li className="before:content-['/'] before:mr-2">
+                            <span className="text-gray-900">{product.title}</span>
+                        </li>
+                    </ol>
+                </nav>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                    {/* Product Images */}
+                    <div className="space-y-4">
+                        <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                            <Image
+                                src={product.image || '/img/placeholder.jpg'}
+                                alt={product.title}
+                                width={600}
+                                height={600}
+                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Product Info */}
+                    <div className="space-y-6">
+                        <div>
+                            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                                {product.title}
+                            </h1>
+                            <div className="flex items-center space-x-4 mb-4">
+                                <span className="text-3xl font-bold text-green-600">
+                                    {formatCurrency(product.price)}
+                                </span>
+                            </div>
+                            
+                            {/* Tags */}
+                            {product.tags && product.tags.length > 0 && (
+                                <div className="flex flex-wrap gap-2 mb-4">
+                                    {product.tags.map((tag, index) => (
+                                        <span
+                                            key={index}
+                                            className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full"
+                                        >
+                                            {tag}
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Description */}
+                        <div>
+                            <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
+                            <p className="text-gray-600 leading-relaxed">
+                                Fresh and high-quality {product.title.toLowerCase()}. Perfect for your kitchen and healthy lifestyle. 
+                                {product.tags && product.tags.includes('organic') && ' This product is certified organic.'}
+                            </p>
+                        </div>
+
+                        {/* Quantity and Add to Cart */}
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-900 mb-2">
+                                    Quantity
+                                </label>
+                                <div className="flex items-center space-x-3">
+                                    <button
+                                        onClick={() => handleQuantityChange(-1)}
+                                        className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                                        disabled={quantity <= 1}
+                                    >
+                                        <i className="fa fa-minus text-sm"></i>
+                                    </button>
+                                    <span className="text-xl font-semibold px-4">
+                                        {quantity}
+                                    </span>
+                                    <button
+                                        onClick={() => handleQuantityChange(1)}
+                                        className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                                    >
+                                        <i className="fa fa-plus text-sm"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="flex space-x-4">
+                                <button
+                                    onClick={handleAddToCart}
+                                    disabled={loading}
+                                    className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+                                >
+                                    <i className="fa fa-shopping-cart"></i>
+                                    <span>{loading ? 'Adding...' : 'Add to Cart'}</span>
+                                </button>
+                                
+                                <button
+                                    onClick={handleToggleWishlist}
+                                    disabled={loading}
+                                    className={`px-4 py-3 rounded-lg border transition-colors ${
+                                        isInWishlist
+                                            ? 'bg-red-50 border-red-300 text-red-600 hover:bg-red-100'
+                                            : 'bg-gray-50 border-gray-300 text-gray-600 hover:bg-gray-100'
+                                    }`}
+                                >
+                                    <i className={`fa ${isInWishlist ? 'fa-heart' : 'fa-heart-o'} text-xl`}></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Product Details */}
+                        <div className="border-t pt-6">
+                            <h3 className="text-lg font-semibold text-gray-900 mb-4">Product Details</h3>
+                            <dl className="space-y-2">
+                                <div className="flex">
+                                    <dt className="font-medium text-gray-900 w-24">Price:</dt>
+                                    <dd className="text-gray-600">{formatCurrency(product.price)}</dd>
+                                </div>
+                                <div className="flex">
+                                    <dt className="font-medium text-gray-900 w-24">Category:</dt>
+                                    <dd className="text-gray-600">
+                                        {product.tags ? product.tags.join(', ') : 'General'}
+                                    </dd>
+                                </div>
+                                <div className="flex">
+                                    <dt className="font-medium text-gray-900 w-24">Seller:</dt>
+                                    <dd className="text-gray-600">{product.email}</dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Related Products Section */}
+                <div className="mt-16">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-8">You might also like</h2>
+                    <div className="text-center text-gray-500">
+                        <p>Related products coming soon...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
-  }
+};
+
+export default ProductDetails;
