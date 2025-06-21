@@ -3,67 +3,71 @@
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
-import { useUser } from "@/context/UserContext"; // Adjust the path if needed
-
+import { useUser } from "@/context/UserContext";
+import { authAPI } from "@/lib/api";
+import toast from 'react-hot-toast';
 
 const LoginPage = () => {
-  const { setUser } = useUser(); // Add this line
-
+  const { login } = useUser();
   const [form, setForm] = useState({
     email: "",
     password: "",
-    // remember: false,
   });
-  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        setErrorMessage(errorData.message || "Login failed");
-        setForm({ email: "", password: "" });
-        return;
+      const response = await authAPI.login(form);
+      const { token, user } = response.data;
+      
+      login(user, token);
+      toast.success('Login successful!');
+      
+      // Redirect based on user category
+      if (user.category === 'admin') {
+        router.push('/admin/dashboard');
+      } else if (user.category === 'seller') {
+        router.push('/seller/dashboard');
+      } else {
+        router.push('/home');
       }
-
-       const data = await response.json();
-       console.log("Login success:", data);
-       setUser(data.user); // Set the user in context
-      router.push('/home');
     } catch (error) {
-      console.error("Error during login:", error);
-      setErrorMessage("An unexpected error occurred. Please try again.");
-      setForm({ email: "", password: "" });
+      console.error("Login error:", error);
+      const errorMessage = error.response?.data?.message || "Login failed. Please try again.";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Sign In</h2>
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center mb-4">
+            <img src="/img/kachabazar_icon.png" alt="KachaBazar" className="w-12 h-12" />
+            <span className="text-2xl font-bold text-green-600 ml-2">KachaBazar</span>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900">Welcome Back</h2>
+          <p className="text-gray-600 mt-2">Sign in to your account</p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4" autoComplete="on">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              Email Address
             </label>
             <input
               type="email"
@@ -72,13 +76,13 @@ const LoginPage = () => {
               value={form.email}
               onChange={handleChange}
               required
-              placeholder="your@email.com"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+              placeholder="Enter your email"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
               Password
             </label>
             <input
@@ -88,40 +92,65 @@ const LoginPage = () => {
               value={form.password}
               onChange={handleChange}
               required
-              placeholder="Type your password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+              placeholder="Enter your password"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all"
             />
           </div>
 
-          {/* <div className="flex items-center justify-between">
-            <label className="flex items-center">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
               <input
+                id="remember-me"
+                name="remember-me"
                 type="checkbox"
-                name="remember"
-                checked={form.remember}
-                onChange={handleChange}
-                className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
               />
-              <span className="ml-2 text-sm text-gray-600">Remember me</span>
-            </label>
-            <a href="#" className="text-sm text-indigo-600 hover:text-indigo-500">
-              Forgot password?
-            </a>
-          </div> */}
-          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                Remember me
+              </label>
+            </div>
+
+            <div className="text-sm">
+              <a href="#" className="font-medium text-green-600 hover:text-green-500">
+                Forgot password?
+              </a>
+            </div>
+          </div>
+
           <button
             type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors"
+            disabled={loading}
+            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
           >
-            Sign In
+            {loading ? (
+              <div className="flex items-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Signing in...
+              </div>
+            ) : (
+              'Sign in'
+            )}
           </button>
+
+          <div className="text-center">
+            <p className="text-sm text-gray-600">
+              Don't have an account?{' '}
+              <Link href="/register" className="font-medium text-green-600 hover:text-green-500">
+                Sign up here
+              </Link>
+            </p>
+          </div>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-600">
-            Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-indigo-600 hover:text-indigo-500 font-medium">
-                Sign up
-            </Link>
+        <div className="mt-8 pt-6 border-t border-gray-200">
+          <div className="text-center">
+            <p className="text-xs text-gray-500">
+              By signing in, you agree to our{' '}
+              <a href="#" className="text-green-600 hover:text-green-500">Terms of Service</a>
+              {' '}and{' '}
+              <a href="#" className="text-green-600 hover:text-green-500">Privacy Policy</a>
+            </p>
+          </div>
         </div>
       </div>
     </div>

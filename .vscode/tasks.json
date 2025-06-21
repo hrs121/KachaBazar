@@ -1,0 +1,48 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Start Backend Server",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"server.js"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/kachabazar-backend"
+			},
+			"group": "build",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Start Frontend Server",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"dev"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/kachabazar-frontend"
+			},
+			"group": "build",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Test Backend API",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"test-api.js"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/kachabazar-backend"
+			},
+			"group": "test",
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}
