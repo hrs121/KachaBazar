@@ -1,26 +1,39 @@
 "use client";
 import React, { useState } from 'react';
 import { FaHeart, FaRetweet, FaShoppingCart } from 'react-icons/fa';
+import { useCartWishlist } from '@/context/CartWishlistContext';
+import { useUser } from '@/context/UserContext';
+import Link from 'next/link';
 
-const categories = ['All', 'Oranges', 'Fresh Meat', 'Vegetables', 'Fastfood'];
+const categories = ['All', 'Fruit', 'Vegetables', 'Fresh', 'Organic'];
 
 const products = [
-  { id: 1, title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-1.jpg', tags: ['oranges', 'fresh-meat'] },
-  { id: 2, title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-2.jpg', tags: ['vegetables', 'fastfood'] },
-  { id: 3, title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-3.jpg', tags: ['vegetables', 'fresh-meat'] },
-  { id: 4, title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-4.jpg', tags: ['fastfood', 'oranges'] },
-  { id: 5, title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-5.jpg', tags: ['fresh-meat', 'vegetables'] },
-  { id: 6, title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-6.jpg', tags: ['oranges', 'fastfood'] },
-  { id: 7, title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-7.jpg', tags: ['fresh-meat', 'vegetables'] },
-  { id: 8, title: 'Crab Pool Security', price: 30, image: '/img/featured/feature-8.jpg', tags: ['fastfood', 'vegetables'] },
+  { id: '507f1f77bcf86cd799439011', title: 'Fresh Apple', price: 2.99, image: '/img/featured/feature-1.jpg', tags: ['fruit', 'fresh'] },
+  { id: '507f1f77bcf86cd799439012', title: 'Organic Banana', price: 1.99, image: '/img/featured/feature-2.jpg', tags: ['fruit', 'organic'] },
+  { id: '507f1f77bcf86cd799439013', title: 'Fresh Tomatoes', price: 3.49, image: '/img/featured/feature-3.jpg', tags: ['vegetables', 'fresh'] },
+  { id: '507f1f77bcf86cd799439014', title: 'Green Lettuce', price: 2.29, image: '/img/featured/feature-4.jpg', tags: ['vegetables', 'green'] },
+  { id: '507f1f77bcf86cd799439015', title: 'Organic Carrots', price: 2.79, image: '/img/featured/feature-5.jpg', tags: ['vegetables', 'organic'] },
+  { id: '507f1f77bcf86cd799439016', title: 'Fresh Broccoli', price: 3.99, image: '/img/featured/feature-6.jpg', tags: ['vegetables', 'fresh'] },
+  { id: '507f1f77bcf86cd799439017', title: 'Red Bell Pepper', price: 2.49, image: '/img/featured/feature-7.jpg', tags: ['vegetables', 'fresh'] },
+  { id: '507f1f77bcf86cd799439018', title: 'Fresh Strawberries', price: 4.99, image: '/img/featured/feature-8.jpg', tags: ['fruit', 'fresh'] },
 ];
 
 const FeaturedProducts = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const { addToCart, toggleWishlist, isInWishlist } = useCartWishlist();
+  const { user } = useUser();
 
   const filtered = selectedCategory === 'All'
     ? products
     : products.filter(p => p.tags.includes(selectedCategory.toLowerCase()));
+
+  const handleAddToCart = async (productId) => {
+    await addToCart(productId);
+  };
+
+  const handleToggleWishlist = async (productId) => {
+    await toggleWishlist(productId);
+  };
 
   return (
     <section className="py-16 bg-white">
@@ -39,9 +52,7 @@ const FeaturedProducts = () => {
               {cat}
             </li>
           ))}
-        </ul>
-
-        {/* Product Grid */}
+        </ul>        {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {filtered.map(item => (
               <div
@@ -54,14 +65,34 @@ const FeaturedProducts = () => {
               >
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors duration-300 rounded-t-2xl" />
                 <ul className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <li><a href="#" className="text-white text-lg hover:text-red-500"><FaHeart /></a></li>
-                  <li><a href="#" className="text-white text-lg hover:text-yellow-400"><FaRetweet /></a></li>
-                  <li><a href="#" className="text-white text-lg hover:text-green-400"><FaShoppingCart /></a></li>
+                  <li>
+                    <button 
+                      onClick={() => handleToggleWishlist(item.id)}
+                      className={`text-white text-lg hover:text-red-500 p-2 rounded-full bg-black/20 hover:bg-black/40 transition-colors ${
+                        user && isInWishlist(item.id) ? 'text-red-500' : ''
+                      }`}
+                      disabled={!user}
+                    >
+                      <FaHeart />
+                    </button>
+                  </li>                  <li>
+                    <Link href={`/product-details?id=${item.id}`} className="text-white text-lg hover:text-yellow-400 p-2 rounded-full bg-black/20 hover:bg-black/40 transition-colors">
+                      <FaRetweet />
+                    </Link>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => handleAddToCart(item.id)}
+                      className="text-white text-lg hover:text-green-400 p-2 rounded-full bg-black/20 hover:bg-black/40 transition-colors"
+                      disabled={!user}
+                    >
+                      <FaShoppingCart />
+                    </button>
+                  </li>
                 </ul>
               </div>
-              <div className="p-4 text-center">
-                <h6 className="font-medium text-gray-800 hover:text-green-600">
-                  <a href="#">{item.title}</a>
+              <div className="p-4 text-center">                <h6 className="font-medium text-gray-800 hover:text-green-600">
+                  <Link href={`/product-details?id=${item.id}`}>{item.title}</Link>
                 </h6>
                 <h5 className="text-green-600 font-bold">${item.price.toFixed(2)}</h5>
               </div>

@@ -1,0 +1,18 @@
+{
+  "name": "kachabazar-project",
+  "version": "1.0.0",
+  "description": "KachaBazar E-commerce Platform - Full Stack Application",
+  "scripts": {
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd kachabazar-backend && npm run dev",
+    "frontend": "cd kachabazar-frontend && npm run dev",
+    "install-all": "npm install && cd kachabazar-backend && npm install && cd ../kachabazar-frontend && npm install",
+    "test-api": "cd kachabazar-backend && node test-api.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": ["e-commerce", "nodejs", "nextjs", "mongodb", "express"],
+  "author": "KachaBazar Team",
+  "license": "MIT"
+}
