@@ -72,11 +72,13 @@ const Header = () => {
               <i className="fa fa-search"></i>
             </button>
           </div>
-        </div>
-
-        {/* Navigation Links */}
+        </div>        {/* Navigation Links */}
         <nav className="hidden lg:flex space-x-6 font-medium text-gray-700">
           <Link href="/home" className="hover:text-green-600">Home</Link>
+          
+          {user && (
+            <Link href="/orders" className="hover:text-green-600">My Orders</Link>
+          )}
           
           {user?.category === 'seller' && (
             <>
@@ -109,12 +111,11 @@ const Header = () => {
           </div>
 
           <Link href="/contact" className="hover:text-green-600">Contact</Link>
-        </nav>
-
-        {/* Cart & User Actions */}
+        </nav>        {/* Cart & User Actions */}
         <div className="flex items-center gap-4">
           {user && (
-            <>              <Link href="/wishlist" className="relative text-gray-700 hover:text-red-500">
+            <>
+              <Link href="/wishlist" className="relative text-gray-700 hover:text-red-500">
                 <i className="fa fa-heart text-lg" />
                 <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                   {getWishlistItemCount()}
@@ -129,6 +130,28 @@ const Header = () => {
                   </span>
                 )}
               </Link>
+
+              {/* User Profile Dropdown */}
+              <div className="relative group">
+                <button className="flex items-center gap-2 text-gray-700 hover:text-green-600 lg:hidden">
+                  <i className="fa fa-user text-lg"></i>
+                  <i className="fa fa-chevron-down text-xs"></i>
+                </button>
+                <div className="absolute right-0 mt-2 hidden group-hover:flex flex-col bg-white border border-gray-200 rounded shadow-md py-2 z-20 min-w-[160px] lg:hidden">
+                  <Link href="/orders" className="px-4 py-2 hover:bg-gray-100 text-sm">
+                    <i className="fa fa-list-alt mr-2"></i>My Orders
+                  </Link>
+                  <Link href="/profile" className="px-4 py-2 hover:bg-gray-100 text-sm">
+                    <i className="fa fa-user mr-2"></i>Profile
+                  </Link>
+                  <button 
+                    onClick={handleLogout}
+                    className="px-4 py-2 hover:bg-gray-100 text-sm text-left w-full text-red-600"
+                  >
+                    <i className="fa fa-sign-out mr-2"></i>Logout
+                  </button>
+                </div>
+              </div>
 
               <div className="text-sm text-gray-700 hidden sm:block">
                 Items: <span className="text-green-600 font-semibold">{formatCurrency(cart.totalAmount || 0)}</span>
