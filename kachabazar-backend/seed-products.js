@@ -5,74 +5,98 @@ require('dotenv').config();
 const sampleProducts = [
   { 
     _id: '507f1f77bcf86cd799439011', 
-    name: 'Crab Pool Security', 
-    price: 30, 
-    category: 'fresh-meat',
-    description: 'Fresh seafood product',
-    inStock: true,
+    title: 'Fresh Apple', 
+    price: 2.99, 
+    image: '/img/featured/feature-1.jpg',
+    tags: ['fruit', 'fresh', 'organic'],
     email: 'seller@example.com'
   },
   { 
     _id: '507f1f77bcf86cd799439012', 
-    name: 'Fresh Vegetables', 
-    price: 25, 
-    category: 'vegetables',
-    description: 'Organic fresh vegetables',
-    inStock: true,
+    title: 'Organic Banana', 
+    price: 1.99, 
+    image: '/img/featured/feature-2.jpg',
+    tags: ['fruit', 'organic', 'tropical'],
     email: 'seller@example.com'
   },
   { 
     _id: '507f1f77bcf86cd799439013', 
-    name: 'Organic Meat', 
-    price: 35, 
-    category: 'fresh-meat',
-    description: 'Premium organic meat',
-    inStock: true,
+    title: 'Fresh Tomatoes', 
+    price: 3.49, 
+    image: '/img/featured/feature-3.jpg',
+    tags: ['vegetable', 'fresh', 'red'],
     email: 'seller@example.com'
   },
   { 
     _id: '507f1f77bcf86cd799439014', 
-    name: 'Fast Food Item', 
-    price: 20, 
-    category: 'fastfood',
-    description: 'Quick and tasty fast food',
-    inStock: true,
+    title: 'Green Lettuce', 
+    price: 2.29, 
+    image: '/img/featured/feature-4.jpg',
+    tags: ['vegetable', 'green', 'leafy'],
     email: 'seller@example.com'
   },
   { 
     _id: '507f1f77bcf86cd799439015', 
-    name: 'Fresh Fruit', 
-    price: 15, 
-    category: 'fruits',
-    description: 'Seasonal fresh fruits',
-    inStock: true,
+    title: 'Organic Carrots', 
+    price: 2.79, 
+    image: '/img/featured/feature-5.jpg',
+    tags: ['vegetable', 'organic', 'orange'],
     email: 'seller@example.com'
   },
   { 
     _id: '507f1f77bcf86cd799439016', 
-    name: 'Organic Orange', 
-    price: 18, 
-    category: 'oranges',
-    description: 'Sweet organic oranges',
-    inStock: true,
+    title: 'Fresh Broccoli', 
+    price: 3.99, 
+    image: '/img/featured/feature-6.jpg',
+    tags: ['vegetable', 'green', 'healthy'],
     email: 'seller@example.com'
   },
   { 
     _id: '507f1f77bcf86cd799439017', 
-    name: 'Premium Meat', 
-    price: 45, 
-    category: 'fresh-meat',
-    description: 'High quality premium meat',
-    inStock: true,
+    title: 'Red Bell Pepper', 
+    price: 2.49, 
+    image: '/img/featured/feature-7.jpg',
+    tags: ['vegetable', 'red', 'sweet'],
     email: 'seller@example.com'
   },
   { 
     _id: '507f1f77bcf86cd799439018', 
-    name: 'Healthy Snack', 
-    price: 12, 
-    category: 'fastfood',
-    description: 'Nutritious healthy snack',
-    inStock: true,
+    title: 'Fresh Strawberries', 
+    price: 4.99, 
+    image: '/img/featured/feature-8.jpg',
+    tags: ['fruit', 'berry', 'sweet'],
+    email: 'seller@example.com'
+  },
+  { 
+    _id: '507f1f77bcf86cd799439019', 
+    title: 'Organic Spinach', 
+    price: 2.99, 
+    image: '/img/product/product-1.jpg',
+    tags: ['vegetable', 'leafy', 'iron'],
+    email: 'seller@example.com'
+  },
+  { 
+    _id: '507f1f77bcf86cd79943901a', 
+    title: 'Yellow Onions', 
+    price: 1.79, 
+    image: '/img/product/product-2.jpg',
+    tags: ['vegetable', 'cooking', 'flavor'],
+    email: 'seller@example.com'
+  },
+  { 
+    _id: '507f1f77bcf86cd79943901b', 
+    title: 'Fresh Mushrooms', 
+    price: 3.29, 
+    image: '/img/product/product-3.jpg',
+    tags: ['vegetable', 'umami', 'protein'],
+    email: 'seller@example.com'
+  },
+  { 
+    _id: '507f1f77bcf86cd79943901c', 
+    title: 'Organic Avocado', 
+    price: 1.99, 
+    image: '/img/product/product-4.jpg',
+    tags: ['fruit', 'healthy', 'fat'],
     email: 'seller@example.com'
   }
 ];
