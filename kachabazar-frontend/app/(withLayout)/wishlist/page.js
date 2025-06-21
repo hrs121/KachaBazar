@@ -68,9 +68,8 @@ const WishlistPage = () => {
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {wishlist.products.map((product) => (
-                        <div key={product._id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                            <div className="relative">
-                                <Link href={`/product-details/${product._id}`}>
+                        <div key={product._id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">                            <div className="relative">
+                                <Link href={`/product-details?id=${product._id}`}>
                                     <Image
                                         src={product.image || '/img/placeholder.jpg'}
                                         alt={product.title}
@@ -87,9 +86,8 @@ const WishlistPage = () => {
                                     <i className="fa fa-heart text-red-500 hover:text-red-600"></i>
                                 </button>
                             </div>
-                            
-                            <div className="p-4">
-                                <Link href={`/product-details/${product._id}`}>
+                              <div className="p-4">
+                                <Link href={`/product-details?id=${product._id}`}>
                                     <h3 className="font-semibold text-gray-900 mb-2 hover:text-green-600 transition-colors line-clamp-2">
                                         {product.title}
                                     </h3>

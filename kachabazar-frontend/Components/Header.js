@@ -58,21 +58,19 @@ const Header = () => {
         <Link href="/home" className="flex items-center gap-2">
           <Image src="/img/kachabazar_icon.png" alt="Logo" width={50} height={50} />
           <span className="text-xl font-bold text-green-600">Kacha Bazar</span>
-        </Link>
-
-        {/* Search Bar */}
+        </Link>        {/* Search Bar */}
         <div className="hidden md:flex flex-1 max-w-lg mx-8">
-          <div className="relative w-full">
+          <div className="flex w-full">
             <input
               type="text"
               placeholder="Search for products..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-green-500 border-r-0"
             />
-            <button className="px-6 py-2 bg-green-600 text-white rounded-r-lg hover:bg-green-700 transition-colors">
+            <button className="px-6 py-2 bg-green-600 text-white rounded-r-lg hover:bg-green-700 transition-colors border border-green-600">
               <i className="fa fa-search"></i>
             </button>
           </div>
-        </div>        {/* Navigation Links */}
+        </div>{/* Navigation Links */}
         <nav className="hidden lg:flex space-x-6 font-medium text-gray-700">
           <Link href="/home" className="hover:text-green-600">Home</Link>
           
@@ -181,17 +179,15 @@ const Header = () => {
         <button className="lg:hidden ml-4">
           <i className="fa fa-bars text-xl"></i>
         </button>
-      </div>
-
-      {/* Mobile Search */}
+      </div>      {/* Mobile Search */}
       <div className="md:hidden px-4 pb-4">
-        <div className="relative">
+        <div className="flex">
           <input
             type="text"
             placeholder="Search for products..."
-            className="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-green-500 border-r-0"
           />
-          <button className="absolute right-0 top-0 px-4 py-2 bg-green-600 text-white rounded-r-lg hover:bg-green-700 transition-colors">
+          <button className="px-4 py-2 bg-green-600 text-white rounded-r-lg hover:bg-green-700 transition-colors border border-green-600">
             <i className="fa fa-search"></i>
           </button>
         </div>
