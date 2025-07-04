@@ -23,20 +23,11 @@ const FeaturedProducts = () => {
     try {
       setLoading(true);
       const response = await productAPI.getFeaturedProducts(8);
+      console.log('API Response:', response.data);
       setProducts(response.data || []);
     } catch (error) {
       console.error('Error fetching featured products:', error);
-      // Fallback to static data if API fails
-      setProducts([
-        { _id: '507f1f77bcf86cd799439011', title: 'Fresh Apple', price: 2.99, image: '/img/featured/feature-1.jpg', tags: ['fruit', 'fresh'], category: 'fruits' },
-        { _id: '507f1f77bcf86cd799439012', title: 'Organic Banana', price: 1.99, image: '/img/featured/feature-2.jpg', tags: ['fruit', 'organic'], category: 'fruits' },
-        { _id: '507f1f77bcf86cd799439013', title: 'Fresh Tomatoes', price: 3.49, image: '/img/featured/feature-3.jpg', tags: ['vegetables', 'fresh'], category: 'vegetables' },
-        { _id: '507f1f77bcf86cd799439014', title: 'Green Lettuce', price: 2.29, image: '/img/featured/feature-4.jpg', tags: ['vegetables', 'green'], category: 'vegetables' },
-        { _id: '507f1f77bcf86cd799439015', title: 'Organic Carrots', price: 2.79, image: '/img/featured/feature-5.jpg', tags: ['vegetables', 'organic'], category: 'vegetables' },
-        { _id: '507f1f77bcf86cd799439016', title: 'Fresh Broccoli', price: 3.99, image: '/img/featured/feature-6.jpg', tags: ['vegetables', 'fresh'], category: 'vegetables' },
-        { _id: '507f1f77bcf86cd799439017', title: 'Red Bell Pepper', price: 2.49, image: '/img/featured/feature-7.jpg', tags: ['vegetables', 'fresh'], category: 'vegetables' },
-        { _id: '507f1f77bcf86cd799439018', title: 'Fresh Strawberries', price: 4.99, image: '/img/featured/feature-8.jpg', tags: ['fruit', 'fresh'], category: 'fruits' },
-      ]);
+      setProducts([]); // Show empty state instead of hardcoded data
     } finally {
       setLoading(false);
     }
@@ -76,6 +67,11 @@ const FeaturedProducts = () => {
           <div className="flex justify-center items-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
             <span className="ml-2 text-gray-600">Loading featured products...</span>
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">No products found for the selected category.</p>
+            <p className="text-gray-400 text-sm mt-2">Try selecting a different category or add some products as a seller.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
