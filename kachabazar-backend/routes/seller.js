@@ -59,19 +59,29 @@ router.post('/add-product', auth, requireSeller, async (req, res) => {
       featured = false
     } = req.body;
 
+    // Process tags - convert string to array if needed
+    let processedTags = [];
+    if (tags) {
+      if (typeof tags === 'string') {
+        processedTags = tags.split(',').map(tag => tag.trim()).filter(tag => tag);
+      } else if (Array.isArray(tags)) {
+        processedTags = tags;
+      }
+    }
+
     const newProduct = new Product({ 
       title, 
       description,
-      price, 
-      originalPrice,
+      price: parseFloat(price), 
+      originalPrice: originalPrice ? parseFloat(originalPrice) : null,
       image, 
       category,
-      tags, 
-      stock,
+      tags: processedTags, 
+      stock: parseInt(stock) || 0,
       unit,
       email: req.user.email,
       sellerId: req.user._id,
-      featured
+      featured: Boolean(featured)
     });
 
     const savedProduct = await newProduct.save();

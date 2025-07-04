@@ -107,4 +107,28 @@ router.delete('/delete-product/:id', auth, async (req, res) => {
   }
 });
 
+// 7. Fetch featured products
+router.get('/featured-products', async (req, res) => {
+  try {
+    const featuredProducts = await Product.find({ featured: true })
+      .sort({ createdAt: -1 })
+      .limit(8); // Limit to 8 featured products
+    res.status(200).json(featuredProducts);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// 8. Fetch products by category
+router.get('/category/:category', async (req, res) => {
+  try {
+    const category = req.params.category;
+    const products = await Product.find({ category: category })
+      .sort({ createdAt: -1 });
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;
