@@ -6,17 +6,41 @@ const auth = require('../middleware/auth');
 // 1. Add a new product (protected route)
 router.post('/add-product', auth, async (req, res) => {
   try {
-    const { title, price, image, tags } = req.body;
+    const { 
+      title, 
+      description, 
+      price, 
+      originalPrice, 
+      image, 
+      category, 
+      tags, 
+      stock, 
+      unit,
+      featured 
+    } = req.body;
+    
+    // Convert tags string to array if needed
+    const tagsArray = typeof tags === 'string' ? tags.split(',').map(tag => tag.trim()) : tags;
+    
     const newProduct = new Product({ 
       title, 
-      price, 
+      description,
+      price: parseFloat(price), 
+      originalPrice: originalPrice ? parseFloat(originalPrice) : undefined,
       image, 
-      tags, 
-      email: req.user.email  // Use authenticated user's email
+      category,
+      tags: tagsArray, 
+      stock: parseInt(stock) || 0,
+      unit: unit || 'kg',
+      email: req.user.email,
+      sellerId: req.user._id,
+      featured: featured || false
     });
+    
     const savedProduct = await newProduct.save();
     res.status(200).json(savedProduct);
   } catch (error) {
+    console.error('Add product error:', error);
     res.status(400).json({ error: error.message });
   }
 });
@@ -102,6 +126,41 @@ router.delete('/delete-product/:id', auth, async (req, res) => {
     
     await Product.findByIdAndDelete(productId);
     res.status(200).json({ message: 'Product deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// 7. Fetch featured products
+router.get('/featured-products', async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 8;
+    
+    // First try to get featured products
+    let featuredProducts = await Product.find({ featured: true })
+      .sort({ createdAt: -1 })
+      .limit(limit);
+    
+    // If no featured products, get latest products
+    if (featuredProducts.length === 0) {
+      featuredProducts = await Product.find()
+        .sort({ createdAt: -1 })
+        .limit(limit);
+    }
+    
+    res.status(200).json(featuredProducts);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// 8. Fetch products by category
+router.get('/category/:category', async (req, res) => {
+  try {
+    const category = req.params.category;
+    const products = await Product.find({ category: category })
+      .sort({ createdAt: -1 });
+    res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

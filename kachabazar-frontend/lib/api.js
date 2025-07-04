@@ -69,7 +69,7 @@ export const authAPI = {
 // Products API functions
 export const productsAPI = {
   getAllProducts: (params) => api.get('/products/all-products', { params }),
-  getFeaturedProducts: (limit) => api.get(`/products/featured?limit=${limit}`),
+  getFeaturedProducts: (limit) => api.get(`/products/featured-products?limit=${limit}`),
   getProduct: (id) => api.get(`/products/product/${id}`),
   getMyProducts: (params) => api.get('/products/my-products', { params }),
   addProduct: (data) => api.post('/products/add-product', data),

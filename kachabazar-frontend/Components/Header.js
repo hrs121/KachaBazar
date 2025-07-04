@@ -6,11 +6,17 @@ import { useUser } from "@/context/UserContext";
 import { useCartWishlist } from "@/context/CartWishlistContext";
 import { useRouter } from 'next/navigation';
 import { formatCurrency } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 const Header = () => {
   const { user, logout } = useUser();
   const { cart, getCartItemCount, getWishlistItemCount } = useCartWishlist();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -115,14 +121,16 @@ const Header = () => {
             <>
               <Link href="/wishlist" className="relative text-gray-700 hover:text-red-500">
                 <i className="fa fa-heart text-lg" />
-                <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {getWishlistItemCount()}
-                </span>
+                {mounted && (
+                  <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {getWishlistItemCount()}
+                  </span>
+                )}
               </Link>
 
               <Link href="/shopping-cart" className="relative text-gray-700 hover:text-green-600">
                 <i className="fa fa-shopping-bag text-lg" />
-                {getCartItemCount() > 0 && (
+                {mounted && getCartItemCount() > 0 && (
                   <span className="absolute -top-1 -right-2 bg-green-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     {getCartItemCount()}
                   </span>
