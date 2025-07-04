@@ -36,6 +36,7 @@ app.use('/api/products', require('./routes/products-simple'));
 app.use('/api/cart', require('./routes/cart-functional'));
 app.use('/api/wishlist', require('./routes/wishlist-functional'));
 app.use('/api/orders', require('./routes/orders-functional'));
+app.use('/api/seller', require('./routes/seller')); // Add seller routes
 
 // Health check route
 app.get('/health', (req, res) => {

@@ -122,4 +122,23 @@ export const uploadAPI = {
   deleteImage: (filename) => api.delete(`/upload/image/${filename}`),
 };
 
+// Seller API functions
+export const sellerAPI = {
+  // Dashboard
+  getDashboard: () => api.get('/seller/dashboard'),
+  
+  // Products
+  getMyProducts: (params) => api.get('/seller/my-products', { params }),
+  addProduct: (data) => api.post('/seller/add-product', data),
+  updateProduct: (id, data) => api.put(`/seller/update-product/${id}`, data),
+  deleteProduct: (id) => api.delete(`/seller/delete-product/${id}`),
+  
+  // Orders
+  getSellerOrders: (params) => api.get('/seller/orders', { params }),
+  getPurchaseHistory: (params) => api.get('/seller/purchase-history', { params }),
+  
+  // Profile
+  updateProfile: (data) => api.put('/seller/profile', data),
+};
+
 export default api;
