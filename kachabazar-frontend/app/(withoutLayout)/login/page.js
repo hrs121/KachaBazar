@@ -35,14 +35,7 @@ const LoginPage = () => {
       login(user, token);
       toast.success('Login successful!');
       
-      // Redirect based on user category
-      if (user.category === 'admin') {
-        router.push('/admin/dashboard');
-      } else if (user.category === 'seller') {
-        router.push('/seller/dashboard');
-      } else {
-        router.push('/home');
-      }
+      router.push('/home');
     } catch (error) {
       console.error("Login error:", error);
       const errorMessage = error.response?.data?.message || "Login failed. Please try again.";

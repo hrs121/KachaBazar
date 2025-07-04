@@ -8,7 +8,7 @@ export default function ContactPage() {
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-bold text-white">Contact Us</h2>
           <div className="mt-2 text-white">
-            <a href="/" className="hover:underline">Home</a> <span className="mx-2">/</span> <span>Contact Us</span>
+            <a href="/home" className="hover:underline">Home</a> <span className="mx-2">/</span> <span>Contact Us</span>
           </div>
         </div>
       </section>
