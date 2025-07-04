@@ -14,11 +14,18 @@ const SellerProducts = () => {
   const router = useRouter();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const [pagination, setPagination] = useState({});
   const [editingProduct, setEditingProduct] = useState(null);
   const [editForm, setEditForm] = useState({});
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    
     if (!user) {
       router.push('/login');
       return;
@@ -30,7 +37,7 @@ const SellerProducts = () => {
     }
 
     fetchProducts();
-  }, [user, router]);
+  }, [user, router, mounted]);
 
   const fetchProducts = async (page = 1) => {
     try {
@@ -110,6 +117,17 @@ const SellerProducts = () => {
       [name]: type === 'checkbox' ? checked : value
     }));
   };
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
+          <p className="text-gray-600 mt-2">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!user || user.category !== 'seller') {
     return (
@@ -217,11 +235,12 @@ const SellerProducts = () => {
                             <div className="flex items-center">
                               <div className="w-12 h-12 bg-gray-200 rounded-md flex-shrink-0 mr-4">
                                 <Image
-                                  src={product.image || '/img/product/default-product.jpg'}
+                                  src={product.image || '/img/product/product-1.jpg'}
                                   alt={product.title}
                                   width={48}
                                   height={48}
                                   className="w-full h-full object-cover rounded-md"
+                                  unoptimized
                                 />
                               </div>
                               <div className="flex-1">
@@ -298,11 +317,12 @@ const SellerProducts = () => {
                             <div className="flex items-center">
                               <div className="w-12 h-12 bg-gray-200 rounded-md flex-shrink-0 mr-4">
                                 <Image
-                                  src={product.image || '/img/product/default-product.jpg'}
+                                  src={product.image || '/img/product/product-1.jpg'}
                                   alt={product.title}
                                   width={48}
                                   height={48}
                                   className="w-full h-full object-cover rounded-md"
+                                  unoptimized
                                 />
                               </div>
                               <div>

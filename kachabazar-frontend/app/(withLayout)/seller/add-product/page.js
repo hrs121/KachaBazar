@@ -20,7 +20,7 @@ const AddProduct = () => {
     tags: '',
     stock: '',
     unit: 'kg',
-    image: '/img/product/default-product.jpg',
+    image: '/img/product/product-1.jpg',
     featured: false
   });
 
