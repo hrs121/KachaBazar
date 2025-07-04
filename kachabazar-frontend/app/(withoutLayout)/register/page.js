@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useUser } from "@/context/UserContext"; // Adjust the path if needed
 
 export default function RegisterForm() {
-  const { setUser } = useUser(); // Add this line
+  const { login } = useUser(); // Add this line
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -65,9 +65,8 @@ export default function RegisterForm() {
       return;
     }
 
-       const data = await response.json();
-     console.log("Login success:", data);
-      setUser(data.user); // Set the user in context
+      const data = await response.json();
+      login(data.user, data.token);
       router.push('/home');
     } catch (error) {
       console.error("Error during login:", error);
