@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { FaHeart, FaRetweet, FaShoppingCart } from 'react-icons/fa';
 import { useCartWishlist } from '@/context/CartWishlistContext';
 import { useUser } from '@/context/UserContext';
-import { productAPI } from '@/lib/api';
+import { productsAPI } from '@/lib/api';
 import Link from 'next/link';
 
 const categories = ['All', 'vegetables', 'fruits', 'dairy', 'meat', 'fish', 'grains', 'beverages', 'snacks', 'spices', 'others'];
@@ -22,7 +22,7 @@ const FeaturedProducts = () => {
   const fetchFeaturedProducts = async () => {
     try {
       setLoading(true);
-      const response = await productAPI.getFeaturedProducts(8);
+      const response = await productsAPI.getFeaturedProducts(8);
       console.log('API Response:', response.data);
       setProducts(response.data || []);
     } catch (error) {
